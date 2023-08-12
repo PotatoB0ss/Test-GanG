@@ -17,7 +17,8 @@ mod db_work;
 mod questions_getting;
 
 
-
+#[macro_use]
+extern crate self_update;
 
 #[derive(Clone)]
 struct Key {
@@ -37,6 +38,8 @@ impl Key {
 
 #[tokio::main]
 async fn main() {
+
+
 
     // Протект чтобы не могли открыть приложение больше 1 раза
     // В случае повторного открытия заново откроет браузер в дебаг моде
@@ -58,6 +61,11 @@ async fn main() {
             open_browser();
             CloseHandle(mutex_handle);
             return;
+        }
+
+        if let Err(e) = run(){
+            println!("[ERROR] {}", e);
+            ::std::process::exit(1);
         }
 
         let api_key: String = initialize_key().await.expect("Ошибка получения ключа");
@@ -103,7 +111,6 @@ async fn main() {
 
 fn e_button(key: &String) {
 
-
     let questions_future = get_questions("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");
     let runtime = tokio::runtime::Runtime::new().expect("Failed to create Tokio runtime");
     runtime.block_on(async {
@@ -121,8 +128,28 @@ fn r_button() {
 async fn key_check(value: &String) {
     loop {
         key_update_request(value).expect("Ошибка обновления ключа");
-        sleep(Duration::from_secs(150)).await;
+        sleep(Duration::from_secs(10)).await;
     }
+}
+
+fn run() -> Result<(), Box<dyn ::std::error::Error>> {
+    self_update::backends::github::ReleaseList::configure()
+        .repo_owner("PotatoB0ss")
+        .repo_name("self_update")
+        .build()?
+        .fetch()?;
+
+    self_update::backends::github::Update::configure()
+        .repo_owner("PotatoB0ss")
+        .repo_name("self_update")
+        .bin_name("github")
+        .show_download_progress(true)
+        .show_output(false)
+        .no_confirm(false)
+        .current_version(cargo_crate_version!())
+        .build()?
+        .update()?;
+    Ok(())
 }
 
 
