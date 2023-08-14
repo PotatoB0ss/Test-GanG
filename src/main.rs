@@ -50,7 +50,6 @@ async fn main() {
     // Протект чтобы не могли открыть приложение больше 1 раза
     // В случае повторного открытия заново откроет браузер в дебаг моде
     let mutex_name = CString::new("TestHelper").expect("CString::new failed");
-
     unsafe {
         let mutex_handle = CreateMutexA(
             ptr::null_mut(),
@@ -64,7 +63,6 @@ async fn main() {
 
         if winapi::um::errhandlingapi::GetLastError() == 183 {
             println!("Приложение уже запущено");
-
             open_browser();
             CloseHandle(mutex_handle);
             return;
@@ -77,7 +75,6 @@ async fn main() {
 
         let api_key: String = initialize_key().await.expect("Ошибка получения ключа");
         initialize_driver_and_browser().await.expect("Ошибка инициализации браузера или драйвера");
-
 
         let key = Key::new(api_key);
         let key_clone = key.clone();
@@ -106,7 +103,6 @@ async fn main() {
         tokio::spawn(async move {
             key_check(&a).await;
         });
-
 
         app.wait_for_message().expect("Ошибка в запуске трея");
         hk_handle.join().unwrap();

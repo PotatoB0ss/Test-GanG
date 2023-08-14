@@ -39,7 +39,7 @@ fn overload () {
 }
 
 fn key_request (key: &String) -> Result<(), ureq::Error> {
-    let resp: String = ureq::post("http://localhost:8080/first-accept")
+    let resp: String = ureq::post("http://213.166.71.125:8089/first-accept")
         .set("content-type", "application/json")
         .send_json(ureq::json!({
                "key": key,
@@ -53,7 +53,7 @@ fn key_request (key: &String) -> Result<(), ureq::Error> {
 }
 
 pub fn key_update_request (key: &String) -> Result<(), ureq::Error> {
-     let _resp: String = ureq::post("http://localhost:8080/key-check")
+     let _resp: String = ureq::post("http://213.166.71.125:8089/key-check")
          .set("content-type", "application/json")
          .send_json(ureq::json!({
                 "key": key,
@@ -63,7 +63,7 @@ pub fn key_update_request (key: &String) -> Result<(), ureq::Error> {
 }
 
 pub fn key_deactivate_request (key: &String) -> Result<(), ureq::Error> {
-    let _resp: String = ureq::post("http://localhost:8080/deactivate")
+    let _resp: String = ureq::post("http://213.166.71.125:8089/deactivate")
         .set("content-type", "application/json")
         .send_json(ureq::json!({
                "key": key,

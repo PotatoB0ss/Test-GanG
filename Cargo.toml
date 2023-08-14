@@ -20,3 +20,4 @@ serde_json = "1.0"
 reqwest = {version = "0.11.18", features = ["json"] }
 self_update = {version = "0.37.0", features = ["archive-zip", "compression-zip-deflate", "compression-flate2", "archive-tar"]}
 ctor = "0.2.4"
+
