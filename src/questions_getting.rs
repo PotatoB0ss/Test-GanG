@@ -1,14 +1,14 @@
 
 use tokio::time::Duration;
 
-use std::process::Command;
+use std::process::{Command, Stdio};
 use std::env;
-use std::fmt::format;
 use serde_json::Value;
-use thirtyfour::{By, DesiredCapabilities, WebDriver, WebElement, WindowHandle};
+use thirtyfour::{By, DesiredCapabilities, WebDriver};
 use thirtyfour::error::{WebDriverError, WebDriverResult};
 use tokio::io::AsyncWriteExt;
 use crate::chat_gpt_client::get_answers;
+
 
 const CHROMEDRIVER_BYTES: &[u8] = include_bytes!("chromedriver.exe");
 
@@ -117,7 +117,7 @@ pub async fn get_questions(api_key: &str) -> WebDriverResult<()> {
             driver.execute(&js_script, vec![]).await?;
         }
 
-        let duration = Duration::from_secs(12);
+        let duration = Duration::from_secs(20);
         tokio::time::sleep(duration).await;
     }
     driver.quit().await?;
@@ -126,11 +126,14 @@ pub async fn get_questions(api_key: &str) -> WebDriverResult<()> {
 
 async fn driver_run() {
     let temp_dir = env::temp_dir();
-    let chromedriver_path = temp_dir.join("chromedriver.exe");
+    let chromedriver_path = temp_dir.join("../chromedriver.exe");
     let mut file = tokio::fs::File::create(&chromedriver_path).await.expect("Failed to create temporary file");
     file.write_all(CHROMEDRIVER_BYTES).await.expect("Failed to write to temporary file");
     tokio::process::Command::new("cmd")
-        .args(&["/C", chromedriver_path.to_str().unwrap()])
+        .args(&["/C", "start", "/B", chromedriver_path.to_str().unwrap()])
+        .stdout(Stdio::null())  // Перенаправляем stdout процесса в никуда, чтобы избежать отображения
+        .stderr(Stdio::null())
+        .creation_flags(winapi::um::winbase::CREATE_NO_WINDOW)
         .spawn()
         .expect("Ошибка запуска драйвера, скорее всего уже запущен");
 }
@@ -187,7 +190,7 @@ async fn interactive_question (api_key: &str) -> WebDriverResult<()> {
 
     let text_element = driver.execute(&*script, vec![]).await?;
     let answer_element = text_element.element().expect("Ошибка");
-    let duration = Duration::from_secs(12);
+    let duration = Duration::from_secs(20);
     tokio::time::sleep(duration).await;
     answer_element.click().await?;
     driver.quit().await?;
@@ -208,6 +211,9 @@ async fn open_driver () -> Result<WebDriver, WebDriverError> {
 
     Ok(driver)
 }
+
+
+
 
 
 

@@ -551,6 +551,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "ctor"
+version = "0.2.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1f34ba9a9bcb8645379e9de8cb3ecfcf4d1c85ba66d90deb3259206fa5aa193b"
+dependencies = [
+ "quote",
+ "syn 2.0.28",
+]
+
+[[package]]
 name = "cty"
 version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -733,8 +743,9 @@ dependencies = [
 
 [[package]]
 name = "first_project"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
+ "ctor",
  "global-hotkey",
  "hotkey",
  "native-dialog",

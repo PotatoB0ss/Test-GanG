@@ -19,7 +19,6 @@ pub async fn get_answers(api_key: &str, question: &str) -> Result<String, reqwes
 
     let parsed_response: Value = serde_json::from_str(&resp).expect("Ошибка");
 
-    println!("{resp}");
     let mut response = String::new();
 
     if let Some(text) = parsed_response["choices"][0]["text"].as_str() {

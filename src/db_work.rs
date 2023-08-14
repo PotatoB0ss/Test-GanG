@@ -46,7 +46,6 @@ fn key_request (key: &String) -> Result<(), ureq::Error> {
            }))?
         .into_string()?;
 
-    println!("{}", resp);
     if resp != "200" {
         process::exit(0);
     }
@@ -72,5 +71,6 @@ pub fn key_deactivate_request (key: &String) -> Result<(), ureq::Error> {
         .into_string()?;
     Ok(())
 }
+
 
 
