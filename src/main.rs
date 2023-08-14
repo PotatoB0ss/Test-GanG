@@ -22,7 +22,6 @@ mod db_work;
 mod questions_getting;
 
 
-
 #[macro_use]
 extern crate self_update;
 

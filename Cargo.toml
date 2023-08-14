@@ -1,5 +1,5 @@
 [package]
-name = "first_project"
+name = "TestGanG"
 version = "0.2.0"
 edition = "2021"
 
@@ -21,3 +21,5 @@ reqwest = {version = "0.11.18", features = ["json"] }
 self_update = {version = "0.37.0", features = ["archive-zip", "compression-zip-deflate", "compression-flate2", "archive-tar"]}
 ctor = "0.2.4"
 
+[build-dependencies]
+winres = "0.1"
